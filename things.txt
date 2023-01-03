@@ -1,0 +1,2 @@
+use this as ORM
+  https://gorm.io/docs/
