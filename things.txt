@@ -1,2 +1,5 @@
 use this as ORM
   https://gorm.io/docs/
+
+To autogenerate the structs for GORM
+  https://gorm.io/gen/database_to_structs.html
