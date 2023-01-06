@@ -14,4 +14,5 @@ func Routes() {
 // Get all the
 func getRoutes(router *gin.Engine) {
 	User(router)
+	Users(router)
 }

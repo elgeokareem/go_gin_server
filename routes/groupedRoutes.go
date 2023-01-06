@@ -1,13 +1,13 @@
 package routes
 
 import (
-	"net/http"
+	"goGinServer/controllers"
 
 	"github.com/gin-gonic/gin"
 )
 
-func Users(router *gin.Engine) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"message": "Get user by id"})
-	}
+func Users(router *gin.Engine) {
+	users := router.Group("/sql")
+
+	users.GET("/groupby", controllers.SqlGroupByController())
 }

@@ -1,9 +1,6 @@
 package db
 
 import (
-	"fmt"
-	"goGinServer/db/model"
-
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -19,10 +16,10 @@ func DbConnection() *gorm.DB {
 	// AutoGen(db)
 
 	// make a query and print the result
-	var actor model.Actor
-	db.First(&actor, 1) // find product with integer primary key
-	fmt.Println("------------------")
-	fmt.Println(actor)
+	// var actor model.Actor
+	// db.First(&actor, 1) // find product with integer primary key
+	// fmt.Println("------------------")
+	// fmt.Println(actor)
 
 	return db
 }
