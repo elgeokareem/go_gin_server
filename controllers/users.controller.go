@@ -45,6 +45,6 @@ func Register() gin.HandlerFunc {
 
 		services.RegisterUserService(loginData.EMAIL, loginData.PASSWORD)
 
-		c.JSON(http.StatusOK, gin.H{"status": "todo finito"})
+		c.JSON(http.StatusOK, gin.H{"status": "client registered successfully"})
 	}
 }

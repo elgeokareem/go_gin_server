@@ -1,12 +1,18 @@
 package services
 
 import (
-	"fmt"
+	"goGinServer/db"
+	"goGinServer/db/model"
 	"goGinServer/utils"
 )
 
 func RegisterUserService(email string, password string) {
 	// Hash the password with salt
 	hashedPassword := utils.HashPassword(password)
-	fmt.Println("hashed password", hashedPassword)
+
+	user := model.User{Email: email, Password: hashedPassword}
+
+	// Add user data to DB
+	db := db.DbConnection()
+	db.Create(&user)
 }
