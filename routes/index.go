@@ -11,8 +11,9 @@ func Routes() {
 	router.Run()
 }
 
-// Get all the
+// Get all the routes
 func getRoutes(router *gin.Engine) {
 	User(router)
 	Users(router)
+	LoginUser(router)
 }
