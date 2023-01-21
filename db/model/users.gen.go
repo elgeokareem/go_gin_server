@@ -12,10 +12,11 @@ const TableNameUser = "users"
 
 // User mapped from table <users>
 type User struct {
-	ID             int32     `gorm:"column:id;primaryKey;autoIncrement:true" json:"id"`
-	Created        time.Time `gorm:"column:created;not null" json:"created"`
-	Email          string    `gorm:"column:email;not null" json:"email"`
-	HashedPassword string    `gorm:"column:hashed_password;not null" json:"hashed_password"`
+	ID        int32     `gorm:"column:id;primaryKey;autoIncrement:true" json:"id"`
+	Password  string    `gorm:"column:password;not null" json:"password"`
+	Email     string    `gorm:"column:email;not null" json:"email"`
+	CreatedAt time.Time `gorm:"column:created_at;not null" json:"created_at"`
+	UpdatedAt time.Time `gorm:"column:updated_at" json:"updated_at"`
 }
 
 // TableName User's table name

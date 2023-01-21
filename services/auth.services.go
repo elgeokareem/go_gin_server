@@ -1,6 +1,12 @@
 package services
 
-func RegisterUserService() string {
+import (
+	"fmt"
+	"goGinServer/utils"
+)
 
-	return "Entra al servicio de Register User"
+func RegisterUserService(email string, password string) {
+	// Hash the password with salt
+	hashedPassword := utils.HashPassword(password)
+	fmt.Println("hashed password", hashedPassword)
 }

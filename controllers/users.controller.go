@@ -25,10 +25,7 @@ func Login() gin.HandlerFunc {
 
 		// hash := sha256.New()
 
-		// we can use a service here.
-		data := services.RegisterUserService()
-
-		c.JSON(http.StatusOK, data)
+		c.JSON(http.StatusOK, "todo bien")
 	}
 }
 
@@ -46,6 +43,8 @@ func Register() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error in service"})
 		}
 
-		c.JSON(http.StatusOK, gin.H{"status": loginData.EMAIL})
+		services.RegisterUserService(loginData.EMAIL, loginData.PASSWORD)
+
+		c.JSON(http.StatusOK, gin.H{"status": "todo finito"})
 	}
 }
