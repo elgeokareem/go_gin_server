@@ -43,6 +43,15 @@ func Register() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error in service"})
 		}
 
+		// Check user doesn't exists already
+		isUserInDb := services.CheckIfUserIsRegistered(loginData.EMAIL)
+
+		if isUserInDb {
+			c.JSON(http.StatusConflict, gin.H{"status": "client already registered"})
+			return
+		}
+
+		// Save the user to DB
 		services.RegisterUserService(loginData.EMAIL, loginData.PASSWORD)
 
 		c.JSON(http.StatusOK, gin.H{"status": "client registered successfully"})
