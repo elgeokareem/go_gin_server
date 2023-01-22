@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"goGinServer/services"
-	"goGinServer/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -30,12 +29,14 @@ func Login() gin.HandlerFunc {
 		}
 
 		// Check if password matches
-		matchPassword := utils.DoPasswordsMatch(user.Password, loginData.PASSWORD)
+		matchPassword := services.DoPasswordsMatch(user.Password, loginData.PASSWORD)
 
 		if !matchPassword {
 			c.JSON(http.StatusUnauthorized, gin.H{"status": "password doesn't match"})
 			return
 		}
+
+		// TODO: Generate JWT token and return it to client with cookie
 
 		c.JSON(http.StatusOK, gin.H{"status": "client logged in successfully"})
 	}
