@@ -3,35 +3,43 @@ package controllers
 import (
 	"fmt"
 	"goGinServer/services"
+	"goGinServer/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt/v4"
 )
-
-func Login() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		token := c.Request.Header["Authorization"]
-		tokenParsed, err := jwt.Parse(token[0], func(token *jwt.Token) (interface{}, error) {
-			return []byte("your-256-bit-secret"), nil
-		})
-
-		fmt.Println(tokenParsed)
-
-		if err != nil {
-			fmt.Println(err)
-			c.JSON(http.StatusInternalServerError, "Error")
-		}
-
-		// hash := sha256.New()
-
-		c.JSON(http.StatusOK, "todo bien")
-	}
-}
 
 type LOGIN struct {
 	EMAIL    string `json:"email" binding:"required"`
 	PASSWORD string `json:"password" binding:"required"`
+}
+
+func Login() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var loginData LOGIN
+		err := c.BindJSON(&loginData)
+
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error in service"})
+		}
+
+		user, isUserInDb := services.CheckIfUserIsRegistered(loginData.EMAIL)
+
+		if !isUserInDb {
+			c.JSON(http.StatusNotFound, gin.H{"status": "client not in DB"})
+			return
+		}
+
+		// Check if password matches
+		fmt.Println("user password")
+		fmt.Println(!utils.DoPasswordsMatch(user.Password, loginData.PASSWORD))
+		if !utils.DoPasswordsMatch(user.Password, loginData.PASSWORD) {
+			c.JSON(http.StatusUnauthorized, gin.H{"status": "passwords don't match"})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"status": "client logged in successfully"})
+	}
 }
 
 func Register() gin.HandlerFunc {
@@ -44,7 +52,7 @@ func Register() gin.HandlerFunc {
 		}
 
 		// Check user doesn't exists already
-		isUserInDb := services.CheckIfUserIsRegistered(loginData.EMAIL)
+		_, isUserInDb := services.CheckIfUserIsRegistered(loginData.EMAIL)
 
 		if isUserInDb {
 			c.JSON(http.StatusConflict, gin.H{"status": "client already registered"})

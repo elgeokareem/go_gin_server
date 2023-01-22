@@ -50,3 +50,10 @@ func HashPassword(password string) string {
 
 	return hashedPasswordHex
 }
+
+// Check if two passwords match
+func DoPasswordsMatch(hashedPassword, currPassword string) bool {
+	var currPasswordHash = HashPassword(currPassword)
+
+	return hashedPassword == currPasswordHash
+}

@@ -9,13 +9,14 @@ import (
 	"gorm.io/gorm"
 )
 
-func CheckIfUserIsRegistered(email string) bool {
+func CheckIfUserIsRegistered(email string) (model.User, bool) {
 	db := db.DbConnection()
 	user := model.User{Email: email}
 
-	userDb := db.Limit(1).Find(&user)
+	// userDb := db.Where(user).First(&user)
+	userDb := db.Where("email = ?", email).First(&user)
 
-	return !errors.Is(userDb.Error, gorm.ErrRecordNotFound)
+	return user, !errors.Is(userDb.Error, gorm.ErrRecordNotFound)
 }
 
 func RegisterUserService(email string, password string) {
