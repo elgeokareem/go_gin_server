@@ -21,7 +21,11 @@ func CheckIfUserIsRegistered(email string) (model.User, bool) {
 
 func RegisterUserService(email string, password string) {
 	// Hash the password with salt
-	hashedPassword := utils.HashPassword(password)
+	hashedPassword, err := utils.HashPassword(password)
+
+	if err != nil {
+		panic(err)
+	}
 
 	user := model.User{Email: email, Password: hashedPassword}
 

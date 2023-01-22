@@ -2,8 +2,8 @@ package utils
 
 import (
 	"crypto/rand"
-	"crypto/sha512"
-	"encoding/hex"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 // Generate 16 bytes randomly and securely using the
@@ -24,36 +24,22 @@ func GenerateRandomSalt() []byte {
 	return salt
 }
 
-// Combine password and salt then hash them using the SHA-512
-// hashing algorithm and then return the hashed password
-// as a hex string
-func HashPassword(password string) string {
-	salt := GenerateRandomSalt()
-
+// Hash password
+func HashPassword(password string) (string, error) {
 	// Convert password string to byte slice
 	var passwordBytes = []byte(password)
 
-	// Create sha-512 hasher
-	var sha512Hasher = sha512.New()
+	// Hash password with Bcrypt's min cost
+	hashedPasswordBytes, err := bcrypt.
+		GenerateFromPassword(passwordBytes, bcrypt.MinCost)
 
-	// Append salt to password
-	passwordBytes = append(passwordBytes, salt...)
-
-	// Write password bytes to the hasher
-	sha512Hasher.Write(passwordBytes)
-
-	// Get the SHA-512 hashed password
-	var hashedPasswordBytes = sha512Hasher.Sum(nil)
-
-	// Convert the hashed password to a hex string
-	var hashedPasswordHex = hex.EncodeToString(hashedPasswordBytes)
-
-	return hashedPasswordHex
+	return string(hashedPasswordBytes), err
 }
 
-// Check if two passwords match
+// Check if two passwords match using Bcrypt's CompareHashAndPassword
+// which return nil on success and an error on failure.
 func DoPasswordsMatch(hashedPassword, currPassword string) bool {
-	var currPasswordHash = HashPassword(currPassword)
-
-	return hashedPassword == currPasswordHash
+	err := bcrypt.CompareHashAndPassword(
+		[]byte(hashedPassword), []byte(currPassword))
+	return err == nil
 }

@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"goGinServer/services"
 	"goGinServer/utils"
 	"net/http"
@@ -31,10 +30,10 @@ func Login() gin.HandlerFunc {
 		}
 
 		// Check if password matches
-		fmt.Println("user password")
-		fmt.Println(!utils.DoPasswordsMatch(user.Password, loginData.PASSWORD))
-		if !utils.DoPasswordsMatch(user.Password, loginData.PASSWORD) {
-			c.JSON(http.StatusUnauthorized, gin.H{"status": "passwords don't match"})
+		matchPassword := utils.DoPasswordsMatch(user.Password, loginData.PASSWORD)
+
+		if !matchPassword {
+			c.JSON(http.StatusUnauthorized, gin.H{"status": "password doesn't match"})
 			return
 		}
 
@@ -62,6 +61,6 @@ func Register() gin.HandlerFunc {
 		// Save the user to DB
 		services.RegisterUserService(loginData.EMAIL, loginData.PASSWORD)
 
-		c.JSON(http.StatusOK, gin.H{"status": "client registered successfully"})
+		c.JSON(http.StatusCreated, gin.H{"status": "client registered successfully"})
 	}
 }
