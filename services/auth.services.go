@@ -4,7 +4,10 @@ import (
 	"errors"
 	"goGinServer/db"
 	"goGinServer/db/model"
+	"os"
+	"time"
 
+	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -27,6 +30,33 @@ func DoPasswordsMatch(hashedPassword, currPassword string) bool {
 	err := bcrypt.CompareHashAndPassword(
 		[]byte(hashedPassword), []byte(currPassword))
 	return err == nil
+}
+
+func GenerateJWT(user model.User) (string, error) {
+	type MyCustomClaims struct {
+		User  string `json:"user"`
+		Email string `json:"email"`
+		jwt.RegisteredClaims
+	}
+
+	claims := MyCustomClaims{
+		user.Email,
+		user.Email,
+		jwt.RegisteredClaims{
+			// A usual scenario is to set the expiration time relative to the current time
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
+			IssuedAt:  jwt.NewNumericDate(time.Now()),
+			NotBefore: jwt.NewNumericDate(time.Now()),
+			ID:        "1",
+			Audience:  []string{"somebody_else"},
+		},
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+	ss, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
+
+	return ss, err
 }
 
 func CheckIfUserIsRegistered(email string) (model.User, bool) {

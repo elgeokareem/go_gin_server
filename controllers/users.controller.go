@@ -19,6 +19,7 @@ func Login() gin.HandlerFunc {
 
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error in service"})
+			return
 		}
 
 		user, isUserInDb := services.CheckIfUserIsRegistered(loginData.EMAIL)
@@ -37,8 +38,14 @@ func Login() gin.HandlerFunc {
 		}
 
 		// TODO: Generate JWT token and return it to client with cookie
+		token, err := services.GenerateJWT(user)
 
-		c.JSON(http.StatusOK, gin.H{"status": "client logged in successfully"})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error in service"})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"status": "client logged in successfully", "token": token})
 	}
 }
 
