@@ -37,7 +37,6 @@ func Login() gin.HandlerFunc {
 			return
 		}
 
-		// TODO: Generate JWT token and return it to client with cookie
 		token, err := services.GenerateJWT(user)
 
 		if err != nil {
