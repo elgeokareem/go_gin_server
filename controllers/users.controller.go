@@ -45,7 +45,9 @@ func Login() gin.HandlerFunc {
 			return
 		}
 
-		c.JSON(http.StatusOK, gin.H{"status": "client logged in successfully", "token": token})
+		c.SetCookie("gin_cookie", token, 3600, "/", "localhost", false, true)
+
+		c.JSON(http.StatusOK, gin.H{"status": "client logged in successfully"})
 	}
 }
 
