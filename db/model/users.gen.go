@@ -17,6 +17,7 @@ type User struct {
 	Email     string    `gorm:"column:email;not null" json:"email"`
 	CreatedAt time.Time `gorm:"column:created_at;not null" json:"created_at"`
 	UpdatedAt time.Time `gorm:"column:updated_at" json:"updated_at"`
+	Role      string    `gorm:"column:role;not null;default:regular" json:"role"`
 }
 
 // TableName User's table name
