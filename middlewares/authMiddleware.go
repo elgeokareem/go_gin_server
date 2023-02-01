@@ -14,17 +14,17 @@ func GetJwtToken() gin.HandlerFunc {
 		tokenSecret := os.Getenv("JWT_SECRET")
 
 		token := c.Request.Header["Authorization"]
-		tokenParsed, err := jwt.Parse(token[0], func(token *jwt.Token) (interface{}, error) {
+		_, err := jwt.Parse(token[0], func(token *jwt.Token) (interface{}, error) {
 			return []byte(tokenSecret), nil
 		})
-
-		fmt.Println(tokenParsed)
 
 		if err != nil {
 			fmt.Println(err)
 			c.JSON(http.StatusInternalServerError, "Error")
+			c.Abort()
+			return
 		}
 
-		c.JSON(http.StatusOK, "todo bien")
+		c.Next()
 	}
 }
