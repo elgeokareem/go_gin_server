@@ -18,7 +18,8 @@ func Login() gin.HandlerFunc {
 		err := c.BindJSON(&loginData)
 
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error in service"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Error in service"})
+			c.Abort()
 			return
 		}
 
@@ -26,6 +27,7 @@ func Login() gin.HandlerFunc {
 
 		if !isUserInDb {
 			c.JSON(http.StatusNotFound, gin.H{"status": "client not in DB"})
+			c.Abort()
 			return
 		}
 
@@ -34,6 +36,7 @@ func Login() gin.HandlerFunc {
 
 		if !matchPassword {
 			c.JSON(http.StatusUnauthorized, gin.H{"status": "password doesn't match"})
+			c.Abort()
 			return
 		}
 
@@ -41,6 +44,7 @@ func Login() gin.HandlerFunc {
 
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error in service"})
+			c.Abort()
 			return
 		}
 
