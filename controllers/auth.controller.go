@@ -48,7 +48,15 @@ func Login() gin.HandlerFunc {
 			return
 		}
 
-		c.SetCookie("gin_cookie", token, 3600, "/", "localhost", false, true)
+		completeToken := "Bearer " + token
+
+		// create a cookie to send the token using the c.SetCookie() syntax
+		// the expiration time is set to 24 hours
+		// the cookie is only accessible by the server
+		// the cookie is only accessible through the HTTP protocol
+		// the last parameter is set to true because we're using HTTPS
+		// the last parameter is set to true because we're using HTTPS
+		c.SetCookie("token", completeToken, int(3600), "/", "127.0.0.1", false, false)
 
 		c.JSON(http.StatusOK, gin.H{"status": "client logged in successfully"})
 	}

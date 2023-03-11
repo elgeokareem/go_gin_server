@@ -1,24 +1,18 @@
 package routes
 
 import (
-	"time"
-
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	cors "github.com/itsjamie/gin-cors"
 )
 
 func Routes() {
 	router := gin.Default()
+	// add cors
+	config := cors.DefaultConfig()
+	// config.AllowOrigins = []string{"http://locahost:5173"}
+	config.AllowAllOrigins = true
 
-	router.Use(cors.Middleware(cors.Config{
-		Origins:         "*",
-		Methods:         "GET, PUT, POST, DELETE",
-		RequestHeaders:  "Origin, Authorization, Content-Type",
-		ExposedHeaders:  "",
-		MaxAge:          50 * time.Second,
-		Credentials:     false,
-		ValidateHeaders: false,
-	}))
+	router.Use(cors.New(config))
 
 	getRoutes(router)
 	router.Run()
@@ -26,7 +20,7 @@ func Routes() {
 
 // Get all the routes
 func getRoutes(router *gin.Engine) {
-	User(router)
+	Dashboard(router)
 	Users(router)
-	LoginUser(router)
+	Auth(router)
 }
