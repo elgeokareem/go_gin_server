@@ -1,6 +1,6 @@
-package binanceStructs
+package structsBinance
 
-type WalletBinance struct {
+type Wallet struct {
 	MakerCommission  int64         `json:"makerCommission"`
 	TakerCommission  int64         `json:"takerCommission"`
 	BuyerCommission  int64         `json:"buyerCommission"`

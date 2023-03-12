@@ -5,6 +5,7 @@ import (
 	"crypto/sha256"
 	"encoding/json"
 	"fmt"
+	structsBinance "goGinServer/structs"
 	"io"
 	"net/http"
 	"net/url"
@@ -14,7 +15,7 @@ import (
 	"time"
 )
 
-func GetWalletData() {
+func GetWalletData() []structsBinance.BalanceData {
 	apiKey := os.Getenv("BINANCE_API_KEY")
 	secretKey := os.Getenv("BINANCE_API_SECRET")
 
@@ -41,6 +42,7 @@ func GetWalletData() {
 	// send request
 	client := http.DefaultClient
 	resp, err := client.Do(req)
+
 	if err != nil {
 		panic(err)
 	}
@@ -52,7 +54,7 @@ func GetWalletData() {
 		panic(err)
 	}
 
-	var accountData any
+	var accountData structsBinance.Wallet
 	err = json.Unmarshal(body, &accountData)
 	if err != nil {
 		panic(err)
@@ -60,25 +62,18 @@ func GetWalletData() {
 
 	listOfAssets := accountData.Balances
 
-	// Make new slice
-	// parsedData := make([]BinanceStructs.BalanceDataParsed, 0)
-
 	// Remove assets with 0 balance
+	epsilon := 0.000001 // variable to make comparison
 	for i := 0; i < len(listOfAssets); i++ {
 		freeNumber, errFree := strconv.ParseFloat(listOfAssets[i].Free, 64)
 		if errFree != nil {
 			panic(errFree)
 		}
 
-		// lockedNumber, errLocked := strconv.ParseFloat(listOfAssets[i].Free, 64)
-		// if errLocked != nil {
-		// 	panic(errLocked)
-		// }
-
-		// parsedData = append(parsedData)
-
-		if freeNumber == 0 {
+		if freeNumber < epsilon {
+			// remove item from list
 			listOfAssets = append(listOfAssets[:i], listOfAssets[i+1:]...)
+			i--
 		}
 	}
 
@@ -86,7 +81,5 @@ func GetWalletData() {
 		return listOfAssets[i].Free > listOfAssets[j].Free
 	})
 
-	// for _, balance := range listOfAssets {
-	// 	fmt.Printf("  %s: %s (locked: %s)\n", balance.Asset, balance.Free, balance.Locked)
-	// }
+	return listOfAssets
 }
