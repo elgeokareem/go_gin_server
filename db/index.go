@@ -7,7 +7,13 @@ import (
 	"gorm.io/gorm"
 )
 
-func DbConnection() *gorm.DB {
+type DBService struct {
+	DB *gorm.DB
+}
+
+var Service *DBService
+
+func InitDBService() {
 	dbHost := os.Getenv("HOST_DB")
 	dbUser := os.Getenv("USER_DB")
 	dbPassword := os.Getenv("PASSWORD_DB")
@@ -26,5 +32,5 @@ func DbConnection() *gorm.DB {
 	// Uncomment this line to create the tables models
 	// AutoGen(db)
 
-	return db
+	Service = &DBService{DB: db}
 }

@@ -3,12 +3,11 @@ package services
 import (
 	"crypto/hmac"
 	"crypto/sha256"
-	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	structsBinance "goGinServer/structs"
+	"goGinServer/utils"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
@@ -17,13 +16,14 @@ import (
 	"time"
 )
 
-func GetWalletData() []structsBinance.BalanceData {
+func GetSpotData() ([]structsBinance.BalanceData, error) {
 	binanceBaseURL := os.Getenv("BINANCE_BASE_URL")
 	apiKey := os.Getenv("BINANCE_API_KEY")
 	secretKey := os.Getenv("BINANCE_API_SECRET")
 
 	timestamp := strconv.FormatInt(time.Now().UnixNano()/int64(time.Millisecond), 10)
 	params := url.Values{}
+	params.Add("omitZeroBalances", "false")
 	params.Add("timestamp", timestamp)
 
 	// generate signature
@@ -33,11 +33,13 @@ func GetWalletData() []structsBinance.BalanceData {
 	signatureString := fmt.Sprintf("%x", signature.Sum(nil))
 
 	// create request
-	// url := binanceBaseURL + "/api/v3/account?" + query + "&signature=" + signatureString
-	url := binanceBaseURL + "/sapi/v1/capital/config/getall?" + query + "&signature=" + signatureString
+	url := binanceBaseURL + "/api/v3/account?" + query + "&signature=" + signatureString
+
+	println(url)
+	// url := binanceBaseURL + "/sapi/v1/capital/config/getall?" + query + "&signature=" + signatureString
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	// add API key to headers
@@ -47,21 +49,29 @@ func GetWalletData() []structsBinance.BalanceData {
 	client := http.DefaultClient
 	resp, err := client.Do(req)
 
+	// Codigo para ver los headers del response y ver cuanto weight se ha usado
+	// for name, values := range resp.Header {
+	// 	// Loop over all values for the name.
+	// 	for _, value := range values {
+	// 		fmt.Printf("%s: %s\n", name, value)
+	// 	}
+	// }
+
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	defer resp.Body.Close()
 
 	// parse response data as JSON
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	var accountData structsBinance.Wallet
 	err = json.Unmarshal(body, &accountData)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	listOfAssets := accountData.Balances
@@ -71,7 +81,7 @@ func GetWalletData() []structsBinance.BalanceData {
 	for i := 0; i < len(listOfAssets); i++ {
 		freeNumber, errFree := strconv.ParseFloat(listOfAssets[i].Free, 64)
 		if errFree != nil {
-			panic(errFree)
+			return nil, err
 		}
 
 		if freeNumber < epsilon {
@@ -85,43 +95,16 @@ func GetWalletData() []structsBinance.BalanceData {
 		return listOfAssets[i].Free > listOfAssets[j].Free
 	})
 
-	return listOfAssets
+	return listOfAssets, nil
 }
 
-func Kek() any {
-	apiKey := os.Getenv("BINANCE_API_KEY")
-	secretKey := os.Getenv("BINANCE_API_SECRET")
-	endpoint := "https://api.binance.com/sapi/v1/capital/config/getall"
-	timestamp := strconv.FormatInt(time.Now().Unix()*1000, 10)
-	queryString := "timestamp=" + timestamp
-	signature := hmac.New(sha256.New, []byte(secretKey))
-	signature.Write([]byte(queryString))
-	signatureString := hex.EncodeToString(signature.Sum(nil))
-	queryString += "&signature=" + signatureString
+func GetFundData() ([]*structsBinance.FundingAssetResponse, error) {
+	endpoint := "https://api.binance.com/sapi/v1/asset/get-funding-asset"
+	result, err := utils.GetFundingData(endpoint)
 
-	client := &http.Client{}
-	req, _ := http.NewRequest("GET", endpoint, nil)
-	req.Header.Add("X-MBX-APIKEY", apiKey)
-	req.URL.RawQuery = queryString
-
-	resp, err := client.Do(req)
 	if err != nil {
-		panic(err)
-	}
-	defer resp.Body.Close()
-
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	strBody := string(body)
-	var result []interface{}
-	err3 := json.Unmarshal([]byte(strBody), &result)
-	if err3 != nil {
-		fmt.Println("Error unmarshalling JSON:", err3)
-		return "error"
-	}
-
-	return result
+	return result, nil
 }

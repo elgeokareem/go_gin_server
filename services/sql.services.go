@@ -12,10 +12,8 @@ type Result struct {
 }
 
 func GroupByService() []*Result {
-	db := db.DbConnection()
-
 	var result []*Result
-	db.Raw("SELECT first_name, actor_id, last_name FROM actor").Scan(&result)
+	db.Service.DB.Raw("SELECT first_name, actor_id, last_name FROM actor").Scan(&result)
 
 	for _, item := range result {
 		fmt.Println(item)

@@ -20,7 +20,7 @@ func Routes() {
 
 // Get all the routes
 func getRoutes(router *gin.Engine) {
-	Dashboard(router)
+	Dashboard(router) // The dashboard should be for aggregating the data from the db, not making calls for current data
 	Users(router)
 	Auth(router)
 }

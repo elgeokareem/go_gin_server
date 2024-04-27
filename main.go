@@ -14,7 +14,7 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	db.DbConnection()
+	db.InitDBService()
 
 	routes.Routes()
 }

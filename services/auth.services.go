@@ -60,11 +60,10 @@ func GenerateJWT(user model.User) (string, error) {
 }
 
 func CheckIfUserIsRegistered(email string) (model.User, bool) {
-	db := db.DbConnection()
 	user := model.User{Email: email}
 
 	// userDb := db.Where(user).First(&user)
-	userDb := db.Where("email = ?", email).First(&user)
+	userDb := db.Service.DB.Where("email = ?", email).First(&user)
 
 	return user, !errors.Is(userDb.Error, gorm.ErrRecordNotFound)
 }
@@ -80,6 +79,5 @@ func RegisterUserService(email string, password string) {
 	user := model.User{Email: email, Password: hashedPassword}
 
 	// Add user data to DB
-	db := db.DbConnection()
-	db.Create(&user)
+	db.Service.DB.Create(&user)
 }
