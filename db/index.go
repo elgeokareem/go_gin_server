@@ -21,7 +21,6 @@ func InitDBService() {
 	dbPort := os.Getenv("PORT_DB")
 	dbSslMode := os.Getenv("SSL_MODE_DB")
 
-	// dsn := "host=localhost user=postgres password=12345678 dbname=DVDRental port=5432 sslmode=disable"
 	dsn := "host=" + dbHost + " user=" + dbUser + " password=" + dbPassword + " dbname=" + dbName + " port=" + dbPort + " sslmode=" + dbSslMode
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 

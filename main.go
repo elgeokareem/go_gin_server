@@ -15,6 +15,7 @@ func main() {
 	}
 
 	db.InitDBService()
+	db.InitDatabases()
 
-	routes.Routes()
+	routes.InitServer()
 }

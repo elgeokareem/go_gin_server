@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Routes() {
+func InitServer() {
 	router := gin.Default()
 	// add cors
 	config := cors.DefaultConfig()
@@ -21,6 +21,7 @@ func Routes() {
 // Get all the routes
 func getRoutes(router *gin.Engine) {
 	Dashboard(router) // The dashboard should be for aggregating the data from the db, not making calls for current data
+	CronEndpoints(router)
 	Users(router)
 	Auth(router)
 }

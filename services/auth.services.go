@@ -3,7 +3,7 @@ package services
 import (
 	"errors"
 	"goGinServer/db"
-	"goGinServer/db/model"
+	"goGinServer/db/models"
 	"os"
 	"time"
 
@@ -32,7 +32,7 @@ func DoPasswordsMatch(hashedPassword, currPassword string) bool {
 	return err == nil
 }
 
-func GenerateJWT(user model.User) (string, error) {
+func GenerateJWT(user models.User) (string, error) {
 	type MyCustomClaims struct {
 		User  string `json:"user"`
 		Email string `json:"email"`
@@ -59,8 +59,8 @@ func GenerateJWT(user model.User) (string, error) {
 	return ss, err
 }
 
-func CheckIfUserIsRegistered(email string) (model.User, bool) {
-	user := model.User{Email: email}
+func CheckIfUserIsRegistered(email string) (models.User, bool) {
+	user := models.User{Email: email}
 
 	// userDb := db.Where(user).First(&user)
 	userDb := db.Service.DB.Where("email = ?", email).First(&user)
@@ -76,7 +76,7 @@ func RegisterUserService(email string, password string) {
 		panic(err)
 	}
 
-	user := model.User{Email: email, Password: hashedPassword}
+	user := models.User{Email: email, Password: hashedPassword}
 
 	// Add user data to DB
 	db.Service.DB.Create(&user)
