@@ -1,3 +1,7 @@
+Get a way to init the DB
+  - We should have a set of tables
+  - If we don't have the tables, we should create them
+
 DB model
   binance_spot_wallet
     id, userId, asset, free, locked, freeze, created_at, updated_at
