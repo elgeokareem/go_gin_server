@@ -1,6 +1,14 @@
 Get a way to init the DB
-  - We should have a set of tables
-  - If we don't have the tables, we should create them
+  - We should have a set of tables (Done)
+  - If we don't have the tables, we should create them (Done)
+
+How the app should work?
+  - We will have users (with email, password and binance token) (Done)
+  - Each user will be a tenant
+
+Tenants DBs
+  - name convention for db will be db_<user_id>
+  - We will have a table for each user's wallet
 
 DB model
   binance_spot_wallet

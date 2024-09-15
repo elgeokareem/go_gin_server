@@ -9,7 +9,6 @@ func InitServer() {
 	router := gin.Default()
 	// add cors
 	config := cors.DefaultConfig()
-	// config.AllowOrigins = []string{"http://locahost:5173"}
 	config.AllowAllOrigins = true
 
 	router.Use(cors.New(config))
