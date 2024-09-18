@@ -62,16 +62,17 @@ func Register() gin.HandlerFunc {
 		err := c.BindJSON(&registerData)
 
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error reading register data"})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.Abort()
+			return
 		}
-
-		// TODO: Add validations for fields from the frontend
 
 		// Check user doesn't exists already
 		_, isUserInDb := CheckIfUserIsRegistered(registerData.EMAIL)
 
 		if isUserInDb {
 			c.JSON(http.StatusConflict, gin.H{"status": "client already registered"})
+			c.Abort()
 			return
 		}
 
