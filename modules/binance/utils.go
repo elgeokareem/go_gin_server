@@ -1,4 +1,4 @@
-package utils
+package binance
 
 import (
 	"crypto/hmac"
@@ -6,7 +6,6 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	structsBinance "goGinServer/structs"
 	"io"
 	"net/http"
 	"os"
@@ -14,7 +13,7 @@ import (
 	"time"
 )
 
-func GetFundingData(endpoint string) ([]*structsBinance.FundingAssetResponse, error) {
+func GetFundingData(endpoint string) ([]*FundingAssetResponse, error) {
 	apiKey := os.Getenv("BINANCE_API_KEY")
 	secretKey := os.Getenv("BINANCE_API_SECRET")
 
@@ -46,7 +45,7 @@ func GetFundingData(endpoint string) ([]*structsBinance.FundingAssetResponse, er
 	fmt.Println(strBody)
 
 	// Unmarshal the JSON response into the struct
-	var result []*structsBinance.FundingAssetResponse
+	var result []*FundingAssetResponse
 	if err := json.Unmarshal(body, &result); err != nil {
 		return nil, err
 	}

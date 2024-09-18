@@ -1,4 +1,4 @@
-package structsBinance
+package binance
 
 type Wallet struct {
 	MakerCommission  int64         `json:"makerCommission"`

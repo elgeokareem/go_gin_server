@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"goGinServer/controllers"
+	"goGinServer/modules/auth"
 
 	"github.com/gin-gonic/gin"
 )
@@ -9,6 +9,6 @@ import (
 func Auth(router *gin.Engine) {
 	users := router.Group("/auth")
 
-	users.POST("/login", controllers.Login())
-	users.POST("/register", controllers.Register())
+	users.POST("/login", auth.Login())
+	users.POST("/register", auth.Register())
 }

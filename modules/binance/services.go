@@ -1,12 +1,10 @@
-package services
+package binance
 
 import (
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/json"
 	"fmt"
-	structsBinance "goGinServer/structs"
-	"goGinServer/utils"
 	"io"
 	"net/http"
 	"net/url"
@@ -16,7 +14,7 @@ import (
 	"time"
 )
 
-func GetSpotData() ([]structsBinance.BalanceData, error) {
+func GetSpotData() ([]BalanceData, error) {
 	binanceBaseURL := os.Getenv("BINANCE_BASE_URL")
 	apiKey := os.Getenv("BINANCE_API_KEY")
 	secretKey := os.Getenv("BINANCE_API_SECRET")
@@ -68,7 +66,7 @@ func GetSpotData() ([]structsBinance.BalanceData, error) {
 		return nil, err
 	}
 
-	var accountData structsBinance.Wallet
+	var accountData Wallet
 	err = json.Unmarshal(body, &accountData)
 	if err != nil {
 		return nil, err
@@ -98,9 +96,9 @@ func GetSpotData() ([]structsBinance.BalanceData, error) {
 	return listOfAssets, nil
 }
 
-func GetFundData() ([]*structsBinance.FundingAssetResponse, error) {
+func GetFundData() ([]*FundingAssetResponse, error) {
 	endpoint := "https://api.binance.com/sapi/v1/asset/get-funding-asset"
-	result, err := utils.GetFundingData(endpoint)
+	result, err := GetFundingData(endpoint)
 
 	if err != nil {
 		return nil, err

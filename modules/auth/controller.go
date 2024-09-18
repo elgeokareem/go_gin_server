@@ -1,16 +1,10 @@
-package controllers
+package auth
 
 import (
-	"goGinServer/services"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
-
-type LOGIN struct {
-	EMAIL    string `json:"email" binding:"required"`
-	PASSWORD string `json:"password" binding:"required"`
-}
 
 func Login() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -23,7 +17,7 @@ func Login() gin.HandlerFunc {
 			return
 		}
 
-		user, isUserInDb := services.CheckIfUserIsRegistered(loginData.EMAIL)
+		user, isUserInDb := CheckIfUserIsRegistered(loginData.EMAIL)
 
 		if !isUserInDb {
 			c.JSON(http.StatusNotFound, gin.H{"status": "client not in DB"})
@@ -32,7 +26,7 @@ func Login() gin.HandlerFunc {
 		}
 
 		// Check if password matches
-		matchPassword := services.DoPasswordsMatch(user.Password, loginData.PASSWORD)
+		matchPassword := DoPasswordsMatch(user.Password, loginData.PASSWORD)
 
 		if !matchPassword {
 			c.JSON(http.StatusUnauthorized, gin.H{"status": "password doesn't match"})
@@ -40,7 +34,7 @@ func Login() gin.HandlerFunc {
 			return
 		}
 
-		token, err := services.GenerateJWT(user)
+		token, err := GenerateJWT(user)
 
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error in service"})
@@ -64,15 +58,17 @@ func Login() gin.HandlerFunc {
 
 func Register() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var loginData LOGIN
-		err := c.BindJSON(&loginData)
+		var registerData REGISTER
+		err := c.BindJSON(&registerData)
 
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error in service"})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error reading register data"})
 		}
 
+		// TODO: Add validations for fields from the frontend
+
 		// Check user doesn't exists already
-		_, isUserInDb := services.CheckIfUserIsRegistered(loginData.EMAIL)
+		_, isUserInDb := CheckIfUserIsRegistered(registerData.EMAIL)
 
 		if isUserInDb {
 			c.JSON(http.StatusConflict, gin.H{"status": "client already registered"})
@@ -80,7 +76,7 @@ func Register() gin.HandlerFunc {
 		}
 
 		// Save the user to DB
-		services.RegisterUserService(loginData.EMAIL, loginData.PASSWORD)
+		RegisterUserService(registerData.EMAIL, registerData.PASSWORD)
 
 		c.JSON(http.StatusCreated, gin.H{"status": "client registered successfully"})
 	}
