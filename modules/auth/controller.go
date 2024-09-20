@@ -12,7 +12,7 @@ func Login() gin.HandlerFunc {
 		err := c.BindJSON(&loginData)
 
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Error in service"})
+			c.JSON(http.StatusBadRequest, gin.H{"message": "Error in service"})
 			c.Abort()
 			return
 		}
@@ -20,7 +20,7 @@ func Login() gin.HandlerFunc {
 		user, isUserInDb := CheckIfUserIsRegistered(loginData.EMAIL)
 
 		if !isUserInDb {
-			c.JSON(http.StatusNotFound, gin.H{"status": "client not in DB"})
+			c.JSON(http.StatusNotFound, gin.H{"message": "client not in registered"})
 			c.Abort()
 			return
 		}
@@ -29,7 +29,7 @@ func Login() gin.HandlerFunc {
 		matchPassword := DoPasswordsMatch(user.Password, loginData.PASSWORD)
 
 		if !matchPassword {
-			c.JSON(http.StatusUnauthorized, gin.H{"status": "password doesn't match"})
+			c.JSON(http.StatusUnauthorized, gin.H{"message": "password doesn't match"})
 			c.Abort()
 			return
 		}
