@@ -77,7 +77,13 @@ func Register() gin.HandlerFunc {
 		}
 
 		// Save the user to DB
-		RegisterUserService(registerData.EMAIL, registerData.PASSWORD)
+		err = RegisterUserService(registerData.EMAIL, registerData.PASSWORD)
+
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.Abort()
+			return
+		}
 
 		c.JSON(http.StatusCreated, gin.H{"status": "client registered successfully"})
 	}

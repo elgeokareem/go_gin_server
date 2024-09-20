@@ -68,18 +68,22 @@ func CheckIfUserIsRegistered(email string) (models.User, bool) {
 	return user, !errors.Is(userDb.Error, gorm.ErrRecordNotFound)
 }
 
-func RegisterUserService(email string, password string) {
+func RegisterUserService(email string, password string) error {
 	// Hash the password with salt
 	hashedPassword, err := HashPassword(password)
 
 	if err != nil {
-		// TODO: Handle error properly
-		panic(err)
+		return err
 	}
 
 	user := models.User{Email: email, Password: hashedPassword}
 
 	// Add user data to DB
-	// TODO: Handle error properly
-	db.Service.DB.Create(&user)
+	result := db.Service.DB.Create(&user)
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
 }
