@@ -73,11 +73,13 @@ func RegisterUserService(email string, password string) {
 	hashedPassword, err := HashPassword(password)
 
 	if err != nil {
+		// TODO: Handle error properly
 		panic(err)
 	}
 
 	user := models.User{Email: email, Password: hashedPassword}
 
 	// Add user data to DB
+	// TODO: Handle error properly
 	db.Service.DB.Create(&user)
 }

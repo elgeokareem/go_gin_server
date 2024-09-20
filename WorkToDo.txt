@@ -20,3 +20,9 @@ DB model
   users
     id, email, password, binance_token, created_at, updated_at
 
+  # New
+  This table will have the total current amount of money in USD. In the future we can have the user to change it.
+  current_funds
+    id, userId, asset, amount, created_at, updated_at
+
+It will be a table for all users.
