@@ -12,7 +12,7 @@ func Login() gin.HandlerFunc {
 		err := c.BindJSON(&loginData)
 
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"message": "Error in service"})
+			c.JSON(http.StatusBadRequest, gin.H{"message": "Invalid values"})
 			c.Abort()
 			return
 		}
@@ -20,7 +20,7 @@ func Login() gin.HandlerFunc {
 		user, isUserInDb := CheckIfUserIsRegistered(loginData.EMAIL)
 
 		if !isUserInDb {
-			c.JSON(http.StatusNotFound, gin.H{"message": "client not in registered"})
+			c.JSON(http.StatusNotFound, gin.H{"message": "Invalid credentials"})
 			c.Abort()
 			return
 		}
@@ -29,7 +29,7 @@ func Login() gin.HandlerFunc {
 		matchPassword := DoPasswordsMatch(user.Password, loginData.PASSWORD)
 
 		if !matchPassword {
-			c.JSON(http.StatusUnauthorized, gin.H{"message": "password doesn't match"})
+			c.JSON(http.StatusUnauthorized, gin.H{"message": "Invalid credentials"})
 			c.Abort()
 			return
 		}
@@ -62,7 +62,7 @@ func Register() gin.HandlerFunc {
 		err := c.BindJSON(&registerData)
 
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 			c.Abort()
 			return
 		}
@@ -71,7 +71,7 @@ func Register() gin.HandlerFunc {
 		_, isUserInDb := CheckIfUserIsRegistered(registerData.EMAIL)
 
 		if isUserInDb {
-			c.JSON(http.StatusConflict, gin.H{"status": "client already registered"})
+			c.JSON(http.StatusConflict, gin.H{"message": "client already registered"})
 			c.Abort()
 			return
 		}
@@ -80,11 +80,11 @@ func Register() gin.HandlerFunc {
 		err = RegisterUserService(registerData.EMAIL, registerData.PASSWORD)
 
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 			c.Abort()
 			return
 		}
 
-		c.JSON(http.StatusCreated, gin.H{"status": "client registered successfully"})
+		c.JSON(http.StatusCreated, gin.H{"message": "client registered successfully"})
 	}
 }
