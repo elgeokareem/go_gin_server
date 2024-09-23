@@ -8,9 +8,12 @@ import (
 func InitServer() {
 	router := gin.Default()
 	// add cors
-	config := cors.DefaultConfig()
-	config.AllowAllOrigins = true
-
+	config := cors.Config{
+		AllowOrigins:     []string{"http://localhost:5173"},
+		AllowMethods:     []string{"GET", "POST"},
+		AllowHeaders:     []string{"Content-Type"},
+		AllowCredentials: true, // Important for setting cookies cross-origin
+	}
 	router.Use(cors.New(config))
 
 	getRoutes(router)
