@@ -4,7 +4,7 @@ Get a way to init the DB
 
 How the app should work?
   - We will have users (with email, password and binance token) (Done)
-  - Each user will be a tenant
+  - Each user will be a tenant (Not sure, will be working for me for now)
 
 Tenants DBs
   - name convention for db will be db_<user_id>
@@ -22,7 +22,7 @@ DB model
 
   # New
   This table will have the total current amount of money in USD. In the future we can have the user to change it.
-  current_funds
+  current_funds/close-over-shift-times
     id, userId, asset, amount, created_at, updated_at
 
 It will be a table for all users.
