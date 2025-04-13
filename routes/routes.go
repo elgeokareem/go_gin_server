@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"goGinServer/modules/binance"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -23,4 +25,5 @@ func InitServer() {
 // Get all the routes
 func getRoutes(router *gin.Engine) {
 	Auth(router)
+	binance.BinanceRoutes(router)
 }

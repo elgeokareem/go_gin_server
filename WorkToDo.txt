@@ -11,11 +11,9 @@ Tenants DBs
   - We will have a table for each user's wallet
 
 DB model
-  binance_spot_wallet
-    id, userId, asset, free, locked, freeze, created_at, updated_at
+  binance
+    id, userId, asset, free, locked, freeze, type (fund, spot), created_at, updated_at
 
-  binance_fund_wallet
-    id, userId, asset, free, locked, created_at, updated_at
 
   users
     id, email, password, binance_token, created_at, updated_at
