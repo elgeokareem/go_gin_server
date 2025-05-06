@@ -6,10 +6,6 @@ How the app should work?
   - We will have users (with email, password and binance token) (Done)
   - Each user will be a tenant (Not sure, will be working for me for now)
 
-Tenants DBs
-  - name convention for db will be db_<user_id>
-  - We will have a table for each user's wallet
-
 DB model
   binance
     id, userId, asset, free, locked, freeze, type (fund, spot), created_at, updated_at

@@ -14,6 +14,7 @@ func GetSpotHandler() gin.HandlerFunc {
 		}
 
 		fmt.Printf("Data: %+v \n", data)
+		// Now i need to store the data in the db
 		c.JSON(200, gin.H{"data": data})
 	}
 }

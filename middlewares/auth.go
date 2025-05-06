@@ -25,11 +25,10 @@ func GetJwtToken() gin.HandlerFunc {
 		token, err := jwt.Parse(tokenString[0], func(token *jwt.Token) (interface{}, error) {
 			return []byte(tokenSecret), nil
 		})
-
 		if err != nil {
 			fmt.Println("token: ", token)
 			fmt.Println("token tokenString: ", tokenString)
-			fmt.Println("error:", err)
+			fmt.Println("error GetJwtToken:", err)
 			c.JSON(http.StatusInternalServerError, "Error")
 			c.Abort()
 			return

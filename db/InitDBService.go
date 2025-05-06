@@ -29,12 +29,10 @@ func InitDBService() {
 	// Connection string with the specified database
 	dsnWithDB := dsnWithoutDB + " dbname=" + dbName
 	db, err := gorm.Open(postgres.Open(dsnWithDB), &gorm.Config{})
-
 	if err != nil {
 		fmt.Println("Failed to connect to database")
 
 		temporalDb, err := gorm.Open(postgres.Open(dsnWithoutDB+" dbname=postgres"), &gorm.Config{})
-
 		if err != nil {
 			panic(err)
 		}

@@ -2,25 +2,22 @@ package models
 
 import "time"
 
-type BinanceSpotWallet struct {
-	ID        uint `gorm:"primaryKey"`
-	UserID    uint `gorm:"foreignKey:ID;references:ID"`
-	Asset     string
-	Free      float64
-	Locked    float64
-	Freeze    float64
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	User      User
-}
+type BinanceWalletType string
 
-type BinanceFundWallet struct {
-	ID        uint `gorm:"primaryKey"`
-	UserID    uint `gorm:"foreignKey:ID;references:ID"`
-	Asset     string
-	Free      float64
-	Locked    float64
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	User      User
+const (
+	WalletTypeSpot BinanceWalletType = "spot"
+	WalletTypeFund BinanceWalletType = "fund"
+)
+
+type BinanceWallet struct {
+	ID         uint              `gorm:"primaryKey"`
+	UserID     uint              `gorm:"foreignKey:ID;references:ID"`
+	WalletType BinanceWalletType `gorm:"type:varchar(16);not null"`
+	Asset      string
+	Free       float64
+	Locked     float64
+	Freeze     float64
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
+	User       User
 }
