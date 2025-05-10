@@ -5,6 +5,7 @@ import (
 	"goGinServer/db"
 	"goGinServer/db/models"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
@@ -15,7 +16,7 @@ import (
 // Hash password
 func HashPassword(password string) (string, error) {
 	// Convert password string to byte slice
-	var passwordBytes = []byte(password)
+	passwordBytes := []byte(password)
 
 	// Hash password with Bcrypt's min cost
 	hashedPasswordBytes, err := bcrypt.
@@ -32,22 +33,21 @@ func DoPasswordsMatch(hashedPassword, currPassword string) bool {
 	return err == nil
 }
 
-func GenerateJWT(user models.User) (string, error) {
-	type MyCustomClaims struct {
-		User  string `json:"user"`
-		Email string `json:"email"`
-		jwt.RegisteredClaims
-	}
+type MyCustomClaims struct {
+	ID    string `json:"id"`
+	Email string `json:"email"`
+	jwt.RegisteredClaims
+}
 
+func GenerateJWT(user models.User) (string, error) {
 	claims := MyCustomClaims{
-		user.Email,
+		strconv.FormatUint(uint64(user.ID), 10),
 		user.Email,
 		jwt.RegisteredClaims{
 			// A usual scenario is to set the expiration time relative to the current time
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 			NotBefore: jwt.NewNumericDate(time.Now()),
-			ID:        "1",
 			Audience:  []string{"somebody_else"},
 		},
 	}
@@ -57,6 +57,44 @@ func GenerateJWT(user models.User) (string, error) {
 	ss, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 
 	return ss, err
+}
+
+func ParseAndValidateToken(tokenString string) (*MyCustomClaims, error) {
+	claims := &MyCustomClaims{}
+	jwtSecret := os.Getenv("JWT_SECRET")
+	if jwtSecret == "" {
+		return nil, jwt.NewValidationError(
+			"JWT_SECRET not configured",
+			jwt.ValidationErrorUnverifiable,
+		)
+	}
+
+	token, err := jwt.ParseWithClaims(
+		tokenString,
+		claims,
+		func(token *jwt.Token) (interface{}, error) {
+			// Don't forget to validate the alg is what you expect:
+			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+				return nil, jwt.NewValidationError(
+					"unexpected signing method",
+					jwt.ValidationErrorSignatureInvalid,
+				)
+			}
+			return []byte(jwtSecret), nil
+		},
+	)
+	if err != nil {
+		return nil, err // Handles expired tokens, malformed tokens, etc.
+	}
+
+	if !token.Valid {
+		return nil, jwt.NewValidationError(
+			"invalid token",
+			jwt.ValidationErrorClaimsInvalid,
+		)
+	}
+
+	return claims, nil
 }
 
 func CheckIfUserIsRegistered(email string) (models.User, bool) {
@@ -71,7 +109,6 @@ func CheckIfUserIsRegistered(email string) (models.User, bool) {
 func RegisterUserService(email string, password string) error {
 	// Hash the password with salt
 	hashedPassword, err := HashPassword(password)
-
 	if err != nil {
 		return err
 	}

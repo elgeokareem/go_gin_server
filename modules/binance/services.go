@@ -5,6 +5,8 @@ import (
 	"crypto/sha256"
 	"encoding/json"
 	"fmt"
+	"goGinServer/db"
+	"goGinServer/db/models"
 	"io"
 	"net/http"
 	"net/url"
@@ -46,7 +48,6 @@ func GetSpotData() ([]BalanceData, error) {
 	// send request
 	client := http.DefaultClient
 	resp, err := client.Do(req)
-
 	// Codigo para ver los headers del response y ver cuanto weight se ha usado
 	// for name, values := range resp.Header {
 	// 	// Loop over all values for the name.
@@ -54,7 +55,6 @@ func GetSpotData() ([]BalanceData, error) {
 	// 		fmt.Printf("%s: %s\n", name, value)
 	// 	}
 	// }
-
 	if err != nil {
 		return nil, err
 	}
@@ -99,10 +99,22 @@ func GetSpotData() ([]BalanceData, error) {
 func GetFundData() ([]*FundingAssetResponse, error) {
 	endpoint := "https://api.binance.com/sapi/v1/asset/get-funding-asset"
 	result, err := GetFundingData(endpoint)
-
 	if err != nil {
 		return nil, err
 	}
 
 	return result, nil
+}
+
+func InsertSpotDataInDb(spotData []BalanceData) error {
+	spotRecord := models.BinanceWallet{}
+
+	// Add user data to DB
+	result := db.Service.DB.Create(&spotRecord)
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
 }

@@ -10,7 +10,6 @@ func Login() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var loginData LOGIN
 		err := c.BindJSON(&loginData)
-
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"message": "Invalid values"})
 			c.Abort()
@@ -35,7 +34,6 @@ func Login() gin.HandlerFunc {
 		}
 
 		token, err := GenerateJWT(user)
-
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error in service"})
 			c.Abort()
@@ -49,7 +47,7 @@ func Login() gin.HandlerFunc {
 		// the cookie is only accessible by the server
 		// the cookie is only accessible through the HTTP protocol
 		// the last parameter is set to true because we're using HTTPS
-		c.SetCookie("token", completeToken, int(3600), "/", "localhost", false, false)
+		c.SetCookie("access_token", completeToken, int(3600), "/", "localhost", false, false)
 
 		c.JSON(http.StatusOK, gin.H{"status": "client logged in successfully"})
 	}
@@ -59,7 +57,6 @@ func Register() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var registerData REGISTER
 		err := c.BindJSON(&registerData)
-
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 			c.Abort()
@@ -77,7 +74,6 @@ func Register() gin.HandlerFunc {
 
 		// Save the user to DB
 		err = RegisterUserService(registerData.EMAIL, registerData.PASSWORD)
-
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 			c.Abort()
