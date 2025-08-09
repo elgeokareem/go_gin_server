@@ -70,3 +70,8 @@ type FundingAssetResponse struct {
 	Withdrawing  string `json:"withdrawing"`
 	BtcValuation string `json:"btcValuation"`
 }
+
+type TickerPriceResponse struct {
+	Symbol string `json:"symbol"`
+	Price  string `json:"price"`
+}

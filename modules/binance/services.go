@@ -23,7 +23,7 @@ func GetSpotData() ([]BalanceData, error) {
 
 	timestamp := strconv.FormatInt(time.Now().UnixNano()/int64(time.Millisecond), 10)
 	params := url.Values{}
-	params.Add("omitZeroBalances", "false")
+	params.Add("omitZeroBalances", "true")
 	params.Add("timestamp", timestamp)
 
 	// generate signature
@@ -96,7 +96,7 @@ func GetSpotData() ([]BalanceData, error) {
 	return listOfAssets, nil
 }
 
-func GetFundData() ([]*FundingAssetResponse, error) {
+func GetFundData() ([]BalanceData, error) {
 	endpoint := "https://api.binance.com/sapi/v1/asset/get-funding-asset"
 	result, err := GetFundingData(endpoint)
 	if err != nil {
@@ -106,8 +106,45 @@ func GetFundData() ([]*FundingAssetResponse, error) {
 	return result, nil
 }
 
-func InsertSpotDataInDb(spotData []BalanceData) error {
-	spotRecord := models.BinanceWallet{}
+func GetPairValues(symbolList string) ([]TickerPriceResponse, error) {
+	binanceBaseURL := os.Getenv("BINANCE_BASE_URL")
+
+	escapedSymbolsValue := url.QueryEscape(symbolList)
+
+	fmt.Println("Escaped symbols: -------------------", symbolList)
+
+	// create request
+	fullURL := fmt.Sprintf("%s/api/v3/ticker/price?symbols=%s", binanceBaseURL, escapedSymbolsValue)
+	req, err := http.NewRequest("GET", fullURL, nil)
+	if err != nil {
+		return nil, err
+	}
+	// send request
+	client := http.DefaultClient
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	// parse response data as JSON
+	body, err := io.ReadAll(resp.Body)
+	fmt.Println("Body: ", string(body))
+	if err != nil {
+		return nil, err
+	}
+
+	var ticketPriceData []TickerPriceResponse
+	err = json.Unmarshal(body, &ticketPriceData)
+	if err != nil {
+		return nil, err
+	}
+
+	return ticketPriceData, nil
+}
+
+func InsertSpotDataInDb(spotData []BalanceData, user models.User) error {
+	spotRecord := models.BinanceWallet{UserID: user.ID}
 
 	// Add user data to DB
 	result := db.Service.DB.Create(&spotRecord)

@@ -10,6 +10,7 @@ type BinanceWallet struct {
 	Free       float64
 	Locked     float64
 	Freeze     float64
+	Usd        string
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
 	User       User
