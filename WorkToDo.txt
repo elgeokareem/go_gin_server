@@ -14,9 +14,8 @@ DB model
   users
     id, email, password, binance_token, created_at, updated_at
 
-  # New
-  This table will have the total current amount of money in USD. In the future we can have the user to change it.
-  current_funds/close-over-shift-times
-    id, userId, asset, amount, created_at, updated_at
 
-It will be a table for all users.
+First iteration:
+
+1- Add a cronjob that will run every 10 minutes (https://github.com/go-co-op/gocron)
+2- periodically save the spot and fund data of binance in it
