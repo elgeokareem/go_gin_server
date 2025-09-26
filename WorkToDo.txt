@@ -1,3 +1,6 @@
+To autogenerate the structs for GORM
+  https://gorm.io/gen/database_to_structs.html
+
 Get a way to init the DB
   - We should have a set of tables (Done)
   - If we don't have the tables, we should create them (Done)
