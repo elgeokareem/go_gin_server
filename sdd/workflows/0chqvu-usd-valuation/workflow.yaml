@@ -21,7 +21,7 @@ items:
     change_id: usd-valuation-1
     title: USD Valuation of Binance Balances
     type: feature
-    location: changes/2026/10/23/0chqvu-usd-valuation/01-usd-valuation
+    location: specs/2026-10-23-usd-valuation
     context_sections: []
     depends_on: []
     spec_status: approved

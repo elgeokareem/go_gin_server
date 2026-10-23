@@ -18,7 +18,7 @@ Value every Binance spot and funding balance in USD, using Binance's own `btcVal
 
 ### Background
 
-The product goal is to track a user's balance and expenses over time (see [ROADMAP.md](../../../../../specs/ROADMAP.md)). Raw per-asset amounts don't give a single "what is this worth" number, and there's no history.
+The product goal is to track a user's balance and expenses over time (see [ROADMAP.md](../ROADMAP.md)). Raw per-asset amounts don't give a single "what is this worth" number, and there's no history.
 
 ### Current State
 
@@ -277,21 +277,24 @@ User 1 ──── * BalanceSnapshot 1 ──── * SnapshotAsset
 
 ## Specs Directory Changes
 
+Layout convention: each change lives in `specs/YYYY-MM-DD-<name>/` with its `SPEC.md` and `PLAN.md`.
+
 ```
 Before                         After
 specs/                         specs/
 └── INDEX.md                   ├── INDEX.md
-                               └── ROADMAP.md
-changes/ (none)                changes/
-                               ├── INDEX.md
-                               └── 2026/10/23/0chqvu-usd-valuation/01-usd-valuation/SPEC.md
+                               ├── ROADMAP.md
+                               └── 2026-10-23-usd-valuation/
+                                   ├── SPEC.md
+                                   └── PLAN.md
 ```
 
 | Path | Action | Description |
 |------|--------|-------------|
+| specs/INDEX.md | Modified | Lists this change |
 | specs/ROADMAP.md | Added | Project vision, current status, planned changes |
-| changes/INDEX.md | Added | Change registry |
-| changes/2026/10/23/0chqvu-usd-valuation/01-usd-valuation/SPEC.md | Added | This spec |
+| specs/2026-10-23-usd-valuation/SPEC.md | Added | This spec |
+| specs/2026-10-23-usd-valuation/PLAN.md | Added | Implementation plan |
 
 ## Components
 
@@ -424,5 +427,5 @@ None.
 
 ## References
 
-- [specs/ROADMAP.md](../../../../../specs/ROADMAP.md)
+- [specs/ROADMAP.md](../ROADMAP.md)
 - Binance: User Asset `POST /sapi/v3/asset/getUserAsset`; Funding Wallet `POST /sapi/v1/asset/get-funding-asset`; Symbol Price Ticker `GET /api/v3/ticker/price`

@@ -143,7 +143,7 @@ No new components, so there's no scaffolding phase.
 - `modules/binance/constants.go` (deleted)
 - `db/initDatabases.go`
 - `go.mod`, `go.sum`
-- `specs/ROADMAP.md` (status of step 1)
+- `specs/ROADMAP.md` (status of step 1), `specs/INDEX.md` (status)
 
 ## Risks
 

@@ -6,3 +6,5 @@
 {"level":30,"time":1792756245711,"pid":77159,"command":"spec index","args":[],"result":{"success":true,"message":"Generated changes/INDEX.md","data":{"path":"changes/INDEX.md"}},"msg":"Command completed"}
 {"level":30,"time":1792756686769,"pid":78387,"command":"workflow check-gate","args":[],"namespace":"workflow","action":"check-gate","arguments":[],"msg":"CLI invocation"}
 {"level":30,"time":1792756686770,"pid":78387,"command":"workflow check-gate","args":[],"result":{"success":true},"msg":"Command completed"}
+{"level":30,"time":1792793484501,"pid":197742,"command":"spec validate","args":["specs/2026-10-23-usd-valuation/SPEC.md"],"namespace":"spec","action":"validate","arguments":["specs/2026-10-23-usd-valuation/SPEC.md"],"msg":"CLI invocation"}
+{"level":30,"time":1792793484506,"pid":197742,"command":"spec validate","args":["specs/2026-10-23-usd-valuation/SPEC.md"],"result":{"success":true,"message":"specs/2026-10-23-usd-valuation/SPEC.md is valid"},"msg":"Command completed"}
