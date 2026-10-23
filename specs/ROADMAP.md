@@ -42,10 +42,11 @@ Users connect a **read-only** exchange API key (Binance first). The backend:
 
 ## Planned changes (proposed order)
 
-1. **usd-valuation** (in progress): value spot and funding balances in USD using Binance's own `btcValuation` × the BTC/USD price, and save the results.
+1. **usd-valuation** (spec in review, [SPEC](../changes/2026/10/23/0chqvu-usd-valuation/01-usd-valuation/SPEC.md)): value spot and funding balances in USD using Binance's own `btcValuation` × the BTC/USD price, and save the results.
 2. **bugfixes**: the known bugs above, auth on `/binance` routes, one migration system, `decimal` instead of `float64`.
 3. **per-user-credentials**: store each user's read-only API key and secret (encrypted at rest); remove the `.env` keys.
 4. **balance-snapshots-cron**: gocron job that records balances and their valuation every N minutes for every user.
 5. **movements**: pull account movements (deposits, withdrawals, Binance Pay, P2P, Convert, trades), dedupe them, save them, and let users attach a **reason**.
 6. **client API**: endpoints the frontend needs for history, movements and reasons.
-7. **later**: other exchanges, multi-tenant model.
+7. **other-balance-types**: Simple Earn, staking, futures and margin balances (out of scope for usd-valuation).
+8. **later**: other exchanges, multi-tenant model.

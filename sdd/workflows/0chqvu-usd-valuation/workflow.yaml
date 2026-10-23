@@ -5,7 +5,7 @@ created: 2026-10-23
 current: 01-usd-valuation
 
 phase: spec
-step: spec_creation
+step: spec_review
 
 progress:
   total_items: 1
@@ -21,11 +21,11 @@ items:
     change_id: usd-valuation-1
     title: USD Valuation of Binance Balances
     type: feature
-    location: sdd/workflows/0chqvu-usd-valuation/drafts/01-usd-valuation
+    location: changes/2026/10/23/0chqvu-usd-valuation/01-usd-valuation
     context_sections: []
     depends_on: []
-    spec_status: in_progress
+    spec_status: ready_for_review
     plan_status: pending
     impl_status: pending
     review_status: pending
-    substep: solicitation
+    substep: null
