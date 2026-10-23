@@ -1,0 +1,21 @@
+# ============================================================================
+# SDD PROJECT SETTINGS - DO NOT EDIT MANUALLY
+# ============================================================================
+# This file is generated and maintained by SDD commands.
+# To modify settings, use: /sdd with natural language about settings
+# ============================================================================
+
+sdd:
+  initialized_by_plugin_version: "7.3.0"
+  updated_by_plugin_version: "7.3.0"
+  initialized_at: "2026-10-23T11:34:24Z"
+  updated_at: "2026-10-23T11:34:24Z"
+
+project:
+  name: "billetera-backend"
+
+# No tech pack registered: the only available pack (fullstack-typescript)
+# does not match this Go/Gin/GORM codebase. Core SDD lifecycle only.
+techpacks: {}
+
+components: {}

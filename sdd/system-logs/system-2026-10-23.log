@@ -1,0 +1,2 @@
+{"level":30,"time":1792755264854,"pid":73348,"command":"permissions configure","args":[],"namespace":"permissions","action":"configure","arguments":[],"msg":"CLI invocation"}
+{"level":30,"time":1792755264859,"pid":73348,"command":"permissions configure","args":[],"result":{"success":true,"message":"Permissions configured in .claude/settings.local.json","data":{"settingsPath":"/home/elgeokareem/Documentos/codigos/personal/billetera/backend/.claude/settings.local.json","backupPath":null,"permissionsAdded":36}},"msg":"Command completed"}
