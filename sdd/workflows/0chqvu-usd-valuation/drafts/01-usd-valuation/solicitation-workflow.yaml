@@ -1,0 +1,25 @@
+started: 2026-10-23 07:39:02
+last_updated: 2026-10-23 07:39:02
+current_step: 1
+current_question: "Confirm problem/user/outcome and functional requirements draft"
+history:
+  discovery:
+    - id: D1
+      question: "Which components are involved?"
+      answer: "Existing Go backend only (modules/binance); no new components, no tech pack"
+      source: Assumption
+      timestamp: 2026-10-23 07:39:02
+  solicitation: []
+open_questions: []
+user_feedback: []
+answers:
+  context_goal: {}
+  functional_requirements: []
+  non_functional_requirements: {}
+  user_stories: []
+  acceptance_criteria: []
+  edge_cases: []
+  dependencies: []
+  tests: {unit: [], integration: [], e2e: []}
+  technical_details: {}
+review_feedback: []
