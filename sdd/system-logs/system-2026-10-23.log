@@ -4,3 +4,5 @@
 {"level":30,"time":1792756241618,"pid":77127,"command":"spec validate","args":["changes/2026/10/23/0chqvu-usd-valuation/01-usd-valuation/SPEC.md"],"result":{"success":true,"message":"changes/2026/10/23/0chqvu-usd-valuation/01-usd-valuation/SPEC.md is valid"},"msg":"Command completed"}
 {"level":30,"time":1792756245705,"pid":77159,"command":"spec index","args":[],"namespace":"spec","action":"index","arguments":[],"msg":"CLI invocation"}
 {"level":30,"time":1792756245711,"pid":77159,"command":"spec index","args":[],"result":{"success":true,"message":"Generated changes/INDEX.md","data":{"path":"changes/INDEX.md"}},"msg":"Command completed"}
+{"level":30,"time":1792756686769,"pid":78387,"command":"workflow check-gate","args":[],"namespace":"workflow","action":"check-gate","arguments":[],"msg":"CLI invocation"}
+{"level":30,"time":1792756686770,"pid":78387,"command":"workflow check-gate","args":[],"result":{"success":true},"msg":"Command completed"}

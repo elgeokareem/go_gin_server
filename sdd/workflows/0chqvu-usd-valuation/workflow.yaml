@@ -4,13 +4,13 @@ source: interactive
 created: 2026-10-23
 current: 01-usd-valuation
 
-phase: spec
-step: spec_review
+phase: plan
+step: plan_review
 
 progress:
   total_items: 1
-  specs_completed: 0
-  specs_pending: 1
+  specs_completed: 1
+  specs_pending: 0
   plans_completed: 0
   plans_pending: 1
   implemented: 0
@@ -24,8 +24,8 @@ items:
     location: changes/2026/10/23/0chqvu-usd-valuation/01-usd-valuation
     context_sections: []
     depends_on: []
-    spec_status: ready_for_review
-    plan_status: pending
+    spec_status: approved
+    plan_status: in_progress
     impl_status: pending
     review_status: pending
     substep: null
