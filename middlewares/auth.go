@@ -10,7 +10,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt/v4"
+	"github.com/golang-jwt/jwt/v5"
 	"gorm.io/gorm"
 )
 
@@ -38,19 +38,15 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		claims, err := auth.ParseAndValidateToken(tokenString)
 		if err != nil {
-			// Check for specific JWT errors if needed
-			if ve, ok := err.(*jwt.ValidationError); ok {
-				if ve.Errors&jwt.ValidationErrorMalformed != 0 {
-					c.JSON(http.StatusUnauthorized, gin.H{"error": "Malformed token"})
-				} else if ve.Errors&(jwt.ValidationErrorExpired|jwt.ValidationErrorNotValidYet) != 0 {
-					c.JSON(http.StatusUnauthorized, gin.H{"error": "Token is expired or not active yet"})
-				} else if ve.Errors&jwt.ValidationErrorSignatureInvalid != 0 {
-					c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token signature"})
-				} else {
-					c.JSON(http.StatusUnauthorized, gin.H{"error": "Couldn't handle this token"})
-				}
-			} else {
-				c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+			switch {
+			case errors.Is(err, jwt.ErrTokenMalformed):
+				c.JSON(http.StatusUnauthorized, gin.H{"error": "Malformed token"})
+			case errors.Is(err, jwt.ErrTokenExpired), errors.Is(err, jwt.ErrTokenNotValidYet):
+				c.JSON(http.StatusUnauthorized, gin.H{"error": "Token is expired or not active yet"})
+			case errors.Is(err, jwt.ErrTokenSignatureInvalid):
+				c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token signature"})
+			default:
+				c.JSON(http.StatusUnauthorized, gin.H{"error": "Couldn't handle this token"})
 			}
 			c.Abort()
 			return

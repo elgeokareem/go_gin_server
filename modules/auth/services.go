@@ -2,13 +2,14 @@ package auth
 
 import (
 	"errors"
+	"fmt"
 	"goGinServer/db"
 	"goGinServer/db/models"
 	"os"
 	"strconv"
 	"time"
 
-	"github.com/golang-jwt/jwt/v4"
+	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -63,9 +64,9 @@ func ParseAndValidateToken(tokenString string) (*MyCustomClaims, error) {
 	claims := &MyCustomClaims{}
 	jwtSecret := os.Getenv("JWT_SECRET")
 	if jwtSecret == "" {
-		return nil, jwt.NewValidationError(
-			"JWT_SECRET not configured",
-			jwt.ValidationErrorUnverifiable,
+		return nil, fmt.Errorf(
+			"JWT_SECRET not configured: %w",
+			jwt.ErrTokenUnverifiable,
 		)
 	}
 
@@ -75,9 +76,9 @@ func ParseAndValidateToken(tokenString string) (*MyCustomClaims, error) {
 		func(token *jwt.Token) (interface{}, error) {
 			// Don't forget to validate the alg is what you expect:
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-				return nil, jwt.NewValidationError(
-					"unexpected signing method",
-					jwt.ValidationErrorSignatureInvalid,
+				return nil, fmt.Errorf(
+					"unexpected signing method: %w",
+					jwt.ErrTokenSignatureInvalid,
 				)
 			}
 			return []byte(jwtSecret), nil
@@ -88,9 +89,9 @@ func ParseAndValidateToken(tokenString string) (*MyCustomClaims, error) {
 	}
 
 	if !token.Valid {
-		return nil, jwt.NewValidationError(
-			"invalid token",
-			jwt.ValidationErrorClaimsInvalid,
+		return nil, fmt.Errorf(
+			"invalid token: %w",
+			jwt.ErrTokenInvalidClaims,
 		)
 	}
 
